@@ -272,7 +272,7 @@ const Strings = {
                 },
                 {
                     title: '',
-                    subTitle: 'Offer per Week',
+                    subTitle: ['Offer per hour','Offer per day','Offer per Week'],
                     rate: '0.00'
                 },
                 {

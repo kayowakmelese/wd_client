@@ -1,5 +1,6 @@
 import axios from "axios";
 import axiosRetry from 'axios-retry';
+import constants, { Constants } from "../utils/constants";
 
 axiosRetry(axios, {retries: 3});
 
@@ -22,6 +23,7 @@ const Transport = {
         signup: (data: any) => axios.post(`${baseUrl}/auth/signup`, data),
         login: (data: any) => axios.post(`${baseUrl}/auth/login`, data),
         facebookLogin:(data:any)=>axios.post(`${baseUrl}/auth/SSOLogin`,data)
+
     },
     Twilio: {
         sendSMS: (data: any) => axios.post(`${baseUrl}/twilio/send_SMS`, data),
@@ -109,6 +111,11 @@ const Transport = {
                 "Authorization": 'Bearer ' + token
             }
         }),
+    },
+    maps:{
+        getAutoComplete:(city:string)=>axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${city}&types=geocode&key=${Constants.GoogleApiKey}`),
+        getCoordinate:(placeId:string)=>axios.get(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${Constants.GoogleApiKey}&fields=geometry`)
+
     }
 
 }

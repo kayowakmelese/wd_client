@@ -19,11 +19,12 @@ import Strings from "../../../utils/strings";
 import Button from "../../../components/Button";
 import ErrorModal from "../../../components/errorModal";
 import SuccessfulCard from "../../../components/SuccessfulCard";
-import {getSecureStoreItem, getType} from "../../../utils/CommonFunction";
+import {changeToString, getSecureStoreItem, getType} from "../../../utils/CommonFunction";
 import Transport from "../../../api/Transport";
 import CustomModal from "../../../components/CustomModal";
 import MapView, {Marker} from "react-native-maps";
 import Card from "../../../components/Card";
+import moment from "moment";
 
 export interface Props {
     navigation: any;
@@ -38,6 +39,7 @@ interface State {
     viewOnMap: boolean;
     showCounter: boolean;
     moneyOffer: number;
+    locationName:any;
 }
 
 export default class ServiceDetail extends React.Component<Props, State> {
@@ -51,7 +53,8 @@ export default class ServiceDetail extends React.Component<Props, State> {
             isLoading: false,
             viewOnMap: false,
             showCounter: false,
-            moneyOffer: 0.00
+            moneyOffer: 0.00,
+            locationName:""
         }
     }
 
@@ -60,8 +63,14 @@ export default class ServiceDetail extends React.Component<Props, State> {
         this.props.navigation.goBack();
         return true;
     };
+    changesToString=async (lat:any,long:any)=>{
+        let data=await changeToString(lat,long);
+        this.setState({locationName:data})
+    }
 
-    UNSAFE_componentWillMount() {
+    UNSAFE_componentWillMount=async()=>{
+        // await this.changesToString(this.props.route.params.offerDetail.reqDetail[1].latitude,this.props.route.params.offerDetail.reqDetail[1].longitude)
+
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -100,7 +109,9 @@ export default class ServiceDetail extends React.Component<Props, State> {
     render() {
         const {offerDetail, isSend, isAccept} = this.props.route.params,
             Services = Strings.services
-
+            console.log("offerdetail",offerDetail)
+            
+            this.changesToString(offerDetail.reqDetail[1].latitude,offerDetail.reqDetail[1].longitude)
         return (
             <ScrollView contentContainerStyle={{
                 flex: 1,
@@ -272,26 +283,36 @@ export default class ServiceDetail extends React.Component<Props, State> {
                                         paddingVertical: 20
                                     }}>
                                         <View style={{width: idx === 0 ? '80%' : '100%'}}>
-                                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                            <View style={{justifyContent: 'space-between'}}>
                                                 <Text allowFontScaling={false} // @ts-ignore
                                                       style={{
-                                                          fontSize: 12, color: idx === 4 ? Colors.white : Colors.gray,
-                                                          fontWeight: idx === 4 ? Constants.fontWeight : 'normal'
+                                                          fontSize: 12, color:  Colors.gray,
+                                                          fontWeight:  'normal'
                                                       }}>{service.label}</Text>
 
                                                 {
                                                     typeof service.value == "boolean" &&
-                                                        <Switch
-                                                            style={{
-                                                                transform: [{scaleX: 1.5}, {scaleY: 1.5}],
-                                                                marginRight: 25
-                                                            }}
-                                                            trackColor={{false: '#767577', true: Colors.secondaryColor}}
-                                                            thumbColor={service.value ? Colors.white : Colors.gray}
-                                                            ios_backgroundColor={Colors.secondaryColor}
-                                                            disabled
-                                                            value={service.value}
-                                                        />
+                                                    <Text allowFontScaling={false} // @ts-ignore
+                                                                  style={{
+                                                                      fontSize: 14,
+                                                                      fontWeight: Constants.fontWeight,
+                                                                      color: Colors.white
+                                                                  }}>
+                                                                {
+                                                                    service.value?'EPO is Armed':'EPO is not armed'
+                                                                }
+                                                            </Text>
+                                                        // <Switch
+                                                        //     style={{
+                                                        //         transform: [{scaleX: 1.5}, {scaleY: 1.5}],
+                                                        //         marginRight: 25
+                                                        //     }}
+                                                        //     trackColor={{false: '#767577', true: Colors.secondaryColor}}
+                                                        //     thumbColor={service.value ? Colors.white : Colors.gray}
+                                                        //     ios_backgroundColor={Colors.secondaryColor}
+                                                        //     disabled
+                                                        //     value={service.value}
+                                                        // />
                                                 }
                                             </View>
                                             {
@@ -306,18 +327,27 @@ export default class ServiceDetail extends React.Component<Props, State> {
                                                                       color: Colors.white
                                                                   }}>
                                                                 {
-                                                                    date || '-'
+                                                                    moment(date).format('MM/DD/YYYY') || '-'
                                                                 }
                                                             </Text>
                                                         )
                                                     })
                                                     :
                                                 idx === 1 ?
-                                                    (
+                                                <View>
+                                                <Text allowFontScaling={false} // @ts-ignore
+                                                                  style={{
+                                                                      fontSize: 14,
+                                                                      fontWeight: Constants.fontWeight,
+                                                                      color: Colors.white
+                                                                  }}>
+                                                               {this.state.locationName}
+                                                            </Text>
+                                                    
                                                         <Button onPress={() => this.setState({viewOnMap: true})}
                                                                 label={'View On Map'} isLoading={false}
                                                                 style={{}} noBorder disabled={false}/>
-                                                    )
+                                                    </View>
                                                     :
                                                     <Text allowFontScaling={false} // @ts-ignore
                                                           style={{

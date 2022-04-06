@@ -45,6 +45,7 @@ interface State {
     data: any;
     selectedTime:any;
     selectedPlace:any;
+    selectedText:any;
 }
 
 export default class Home extends React.Component<Props, State> {
@@ -63,11 +64,12 @@ export default class Home extends React.Component<Props, State> {
             plans: ['Hourly', 'Daily', 'Weekly'],
             selectedOptions: [],
             data: [
-                'Select date',
+                'Select hour',
                 'Select location',
                 'Select one type'
             ],
-            selectedPlace:""
+            selectedPlace:"",
+            selectedText:Strings.home.Home.required[3].subTitle[0]
 
         }
     }
@@ -99,11 +101,24 @@ export default class Home extends React.Component<Props, State> {
             showTimePicker: false,
             selectedOptions: [],
             data: [
-                'Select date',
+                `Select ${this.returnText(idx)}`,
                 'Select location',
                 'Select one type'
-            ]
+            ],
+            selectedText:Strings.home.Home.required[3].subTitle[idx]
+
+            
         })
+    }
+    returnText=(idx:number)=>{
+        switch(idx){
+            case 0:
+                return "hour";
+                case 1:
+                    return "date";
+                    default:
+                        return "week";
+        }
     }
 
     UNSAFE_componentWillMount() {
@@ -162,7 +177,7 @@ export default class Home extends React.Component<Props, State> {
                         <DateTimePicker
                         textColor="black"
                         style={{width:'100%',elevation:10,backgroundColor:'white'}}
-                        value={this.state.data[0]==='Select date'?new Date():new Date(this.state.data[0][this.state.data[0].length-1])}
+                        value={this.state.data[0]==='Select hour'?new Date():new Date(this.state.data[0][this.state.data[0].length-1])}
                         mode={'time'}
                         is24Hour={false}
                         display='spinner'
@@ -299,6 +314,7 @@ export default class Home extends React.Component<Props, State> {
                     <View>
                         {
                             Pending.required.map((data: any, idx: number) => {
+                                console.log("dataa",idx+JSON.stringify(data))
                                 if (idx < 3 || idx > 3)
                                     return (
                                         <TouchableOpacity
@@ -374,7 +390,7 @@ export default class Home extends React.Component<Props, State> {
                                                 width: '75%'
                                             }}>
                                                 <Text allowFontScaling={false}
-                                                      style={{color: Colors.gray}}>{data.subTitle}</Text>
+                                                      style={{color: Colors.gray}}>{this.state.selectedText}</Text>
                                                 <View style={{
                                                     alignItems: 'center',
                                                     flexDirection: 'row',
@@ -470,7 +486,7 @@ export default class Home extends React.Component<Props, State> {
                 }
                 return (
                     <Text key={idx} allowFontScaling={false}
-                          style={{color: Colors.white}}>{plan===0?data[0]!=='Select date'?moment(data[0][0]).format('hh:mm a'):data[0]:data[0] || `Select ${this.state.plans[plan]}`}
+                          style={{color: Colors.white}}>{plan===0?data[0]!=='Select date' && data[0]!=='Select hour' && data[0]!=='Select week'?moment(data[0][0]).format('hh:mm a'):data[0]:data[0] || `Select ${this.state.plans[plan]}`}
                     </Text>
                 )
             case 1:

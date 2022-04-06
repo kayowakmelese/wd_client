@@ -49,7 +49,7 @@ export default class Footer extends React.Component<Props, State> {
     render() {
         return (
             <View style={{
-                height: 60,
+                height: 65,
                 alignItems: 'center',
                 position: 'absolute',
                 bottom: 0,

@@ -56,7 +56,7 @@ export default class Calendar extends React.Component<Props, State> {
 
     UNSAFE_componentWillMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-        this.props.datesSelected!=='Select date'?this.setState({selectedDates:this.props.datesSelected}):null
+        this.props.datesSelected!=='Select date' && this.props.datesSelected!=="Select week"?this.setState({selectedDates:this.props.datesSelected}):null
     }
 
     componentWillUnmount() {
