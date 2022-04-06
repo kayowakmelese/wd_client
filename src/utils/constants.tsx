@@ -268,7 +268,7 @@ export const AWSConfig = {
 }
 
 // const AWSBucketUrl = "s3://arn:aws:s3:us-east-2:833720084481:accesspoint/publicaccess"
-const AWSBucketUrl = "s3://arn:aws:s3:us-east-1:833720084481:accesspoint/watchdogg"
+const AWSBucketUrl = "https://c4sgyrxey6.execute-api.us-east-2.amazonaws.com/production"
 
 export default {
     Constants,
