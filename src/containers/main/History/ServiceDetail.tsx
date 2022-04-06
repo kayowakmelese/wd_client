@@ -308,8 +308,8 @@ export default class ServiceDetail extends React.Component<Props, State> {
                                                         //         marginRight: 25
                                                         //     }}
                                                         //     trackColor={{false: '#767577', true: Colors.secondaryColor}}
-                                                        //     thumbColor={service.value ? Colors.white : Colors.gray}
-                                                        //     ios_backgroundColor={Colors.secondaryColor}
+                                                        //     thumbColor={service.value ? Colors.white : Colors.white}
+                                                        //     ios_backgroundColor={Colors.white}
                                                         //     disabled
                                                         //     value={service.value}
                                                         // />
