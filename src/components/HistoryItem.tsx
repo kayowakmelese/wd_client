@@ -52,12 +52,16 @@ export default class HistoryItem extends React.Component<Props, State> {
                 </View>
                 <View
                     style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text allowFontScaling={false}
+                        <View style={{flexDirection:'row'}}>
+                        <Text allowFontScaling={false}
                           style={{
                               color: history?.status.toLowerCase() == "pending" ? Colors.pending :
                                   history?.status.toLowerCase() == "accepted" ?
                                       Colors.active : Colors.secondaryColor, fontSize: 13
                           }}>{'Detail'}</Text>
+                         
+                        </View>
+                    
                     <Entypo name="chevron-right" size={24}
                             color={history?.status.toLowerCase() == "pending" ? Colors.pending : history?.status.toLowerCase() == "accepted" ?
                                 Colors.active : Colors.secondaryColor}/>

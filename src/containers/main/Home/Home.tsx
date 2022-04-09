@@ -99,6 +99,8 @@ export default class Home extends React.Component<Props, State> {
             type: false,
             doneIndex: [],
             showTimePicker: false,
+            selectedPlace:"",
+
             selectedOptions: [],
             data: [
                 `Select ${this.returnText(idx)}`,
@@ -180,6 +182,7 @@ export default class Home extends React.Component<Props, State> {
                         value={this.state.data[0]==='Select hour'?new Date():new Date(this.state.data[0][this.state.data[0].length-1])}
                         mode={'time'}
                         is24Hour={false}
+                        minimumDate={new Date()}
                         display='spinner'
                         onChange={(e: any) => {
                             let data = this.state.data
@@ -188,7 +191,7 @@ export default class Home extends React.Component<Props, State> {
                                 let selectedTime = new Date()
                                 selectedTime.setTime(e.nativeEvent?.timestamp)
                                 console.log("selected time",selectedTime)
-                                if (new Date().getTime() < new Date(selectedTime).getTime()) {
+                                if (new Date(moment().add(1,'hour').toISOString()).getTime() < new Date(selectedTime).getTime()) {
                                     console.log("data length",data[0].length)
                                     data[0] = [new Date(selectedTime).toISOString()] || []
                                     data[2] = 'Select one type'
@@ -196,7 +199,7 @@ export default class Home extends React.Component<Props, State> {
                                      this.setState({data})
                                     this.updateIndex()
                                 } else {
-                                    Alert.alert('Warning', 'Selected Time can not be past!')
+                                    Alert.alert('Warning', 'Selected Time needs to have a one hour window!')
                                     // this.setState({showTimePicker: false})
                                 }
                             } else {
@@ -208,7 +211,7 @@ export default class Home extends React.Component<Props, State> {
                     </View>
                     }}/>
                     
-                   { Platform.OS!=='ios' && this.state.showTimePicker?<DateTimePicker
+                   { Platform.OS!=='ios' && this.state.showTimePicker && <DateTimePicker
                         
                         value={new Date()}
                         mode={'time'}
@@ -220,7 +223,7 @@ export default class Home extends React.Component<Props, State> {
                             if (e.type === "set") {
                                 let selectedTime = new Date()
                                 selectedTime.setTime(e.nativeEvent?.timestamp)
-                                if (new Date().getTime() < new Date(selectedTime).getTime()) {
+                                if (new Date(moment().add(1,'hour').toISOString()).getTime() < new Date(selectedTime).getTime()) {
                                     data[0] = [new Date(selectedTime).toLocaleString()] || []
                                     data[2] = 'Select one type'
                                     this.setState({data, showTimePicker: false})
@@ -233,7 +236,7 @@ export default class Home extends React.Component<Props, State> {
                                 this.setState({data, showTimePicker: false})
                             }
                         }}
-                    />:null}</>
+                    />}</>
                     :null
                     
                 }
