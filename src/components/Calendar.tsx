@@ -76,7 +76,7 @@ export default class Calendar extends React.Component<Props, State> {
                 <SafeAreaView style={{backgroundColor: Colors.primaryColor, flex: 1}}>
                     <HeaderTitle text={
                         this.state.selectedDates.length > 1 ?
-                            `${moment(this.state.selectedDates[0]).format('MMM')} ${moment(computeDates(this.state.selectedDates,true)).format('YYYY-MM-DD dd')} to  ${moment(computeDates(this.state.selectedDates,false)).format('YYYY-MM-DD dd')}`
+                            `${moment(this.state.selectedDates[0]).format('MMM')} ${moment(computeDates(this.state.selectedDates,true)).format('MM-DD-YYYY dd')} to  ${moment(computeDates(this.state.selectedDates,false)).format('MM-DD-YYYY dd')}`
                             : 'Pickup Date'}/>
 
                     {

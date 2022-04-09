@@ -93,7 +93,7 @@ export default class PickupAddress extends React.Component<Props, State> {
                         <ActivityIndicator size={'small'} color={'gray'} animating={this.state.isLoading}/>
                     </View>
                     {
-                        this.state.hintData.length>0?<View style={{width:'85%',alignSelf:'center',backgroundColor:Colors.primaryColor,position:'absolute',top:175,borderRadius:Constants.borderRadius,zIndex:10,padding:10}}>
+                        this.state.hintData.length>0?<View style={{width:'85%',alignSelf:'center',backgroundColor:Colors.primaryColor,position:'absolute',top:200,borderRadius:Constants.borderRadius,zIndex:10,padding:10}}>
                         {
                             this.state.hintData.map((dat:any,i:number)=>{
                                 return <TouchableOpacity onPress={()=>{
@@ -109,7 +109,7 @@ export default class PickupAddress extends React.Component<Props, State> {
                     
 
                     {
-                        Object.keys(this.state.location).length > 0 ?
+                         Object.keys(this.state.location).length > 0 ?
                             <MapView
                                 mapType={Platform.OS == "android" ? "mutedStandard" : "standard"}
                                 zoomEnabled

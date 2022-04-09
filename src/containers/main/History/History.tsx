@@ -6,6 +6,8 @@ import Strings from "../../../utils/strings";
 import HistoryItem from "../../../components/HistoryItem";
 import {getSecureStoreItem} from "../../../utils/CommonFunction";
 import Transport from "../../../api/Transport";
+import moment from "moment";
+import { diff } from "react-native-reanimated";
 
 export interface Props {
     navigation: any
@@ -126,11 +128,22 @@ export default class History extends React.Component<Props, State> {
         Transport.Request.getUserRequests(JSON.parse(token))
             .then((res) => {
                 if (res.status === 200) {
-                    this.setState({historyList: res.data.data})
+                    console.log("historys",res.data.data)
+                    let arr=res.data.data;
+                    if(arr.length>0){
+                        arr.sort(function(a:any,b:any){
+
+                            return moment(b.createdAt).diff(moment(a.createdAt),'minutes');
+                        })
+                    }
+                    console.log("historys2",res.data.data)
+                    // this.sortHistory(res.data.data)
+                    this.setState({historyList: arr})
                 }
             }).finally(() => this.setState({isEmpty: false}))
             .catch(err => console.log(err))
     }
+   
 }
 
 const styles = (props: any) => {

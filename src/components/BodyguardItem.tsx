@@ -1,5 +1,5 @@
 import React from "react";
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import {Image, StyleSheet, Text, TouchableOpacity, View,ActivityIndicator} from 'react-native'
 import Colors from "../utils/colors";
 import {Constants} from "../utils/constants";
 import {AntDesign} from "@expo/vector-icons";
@@ -10,14 +10,16 @@ export interface Props {
 }
 
 interface State {
-
+    loaderImage:boolean
 }
 
 export default class BodyguardItem extends React.Component<Props, State> {
 
     constructor(Props: any) {
         super(Props);
-        this.state = {}
+        this.state = {
+            loaderImage:false
+        }
     }
 
 
@@ -36,14 +38,25 @@ export default class BodyguardItem extends React.Component<Props, State> {
                                     borderColor: Colors.gray, paddingBottom: 15, marginHorizontal: 15,
                                     alignItems: 'center', justifyContent: 'space-around'
                                 }}>
-                                <Image
-                                    source={detail.profilePicture === "" ? require('../assets/userIcon.png') : {uri: detail.profilePicture}}
-                                    style={{
-                                        borderWidth: detail.profilePicture === "" ? 1 : 0,
-                                        borderColor: Colors.white,
-                                        borderRadius: Constants.borderRadius * 10,
-                                        width: 46, height: 46
-                                    }} resizeMode={'cover'}/>
+                                    {
+                                        !this.state.loaderImage?<Image
+                                        source={require('../assets/userIcon.png')}
+                                        style={{
+                                            borderWidth: detail.profilePicture === "" ? 1 : 0,
+                                            borderColor: Colors.white,
+                                            borderRadius: Constants.borderRadius * 10,
+                                            width: 46, height: 46,position:'absolute',top:0
+                                        }} resizeMode={'cover'}/>:null}
+                                          <Image onLoadEnd={(ayo:void)=>{this.setState({loaderImage:true})}}
+                                        source={{uri: detail.profilePicture}}
+                                        style={{
+                                            borderWidth: detail.profilePicture === "" ? 1 : 0,
+                                            borderColor: Colors.white,
+                                            borderRadius: Constants.borderRadius * 10,
+                                            width: 46, height: 46
+                                        }} resizeMode={'cover'}/>
+                                    
+                              
                                 <View style={{width: '50%', paddingHorizontal: 25}}>
                                     <Text allowFontScaling={false}        // @ts-ignore
                                           style={{

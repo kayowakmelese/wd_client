@@ -41,16 +41,39 @@ export default class Match extends React.Component<Props, State> {
         Transport.User.allEPOs(JSON.parse(token))
             .then(res => {
                 let data = res.data.data
+                let arr=[];
                 data.map(function (detail: any) {
                     // if (parseInt(detail.hourlyRate) < parseInt(reqDetail.reqDetail[3]))
+                    let min=parseInt(reqDetail[4].selectedOption[12])
+                    let max=parseInt(reqDetail[4].selectedOption[16])
+                   
+                    console.log("changed",)
                     detail.reqDetail = reqDetail
                     detail.price = 345.00
                     detail.rate = '98%'
                     detail.rateCount = 45
                     detail.aboutData = [detail.height, detail.weight, detail.age]
-                    return detail
+                    // if(detail.availability===0){
+                        if(detail.workingExperience<=min){
+                            if(parseInt(detail.hourlyRate)<parseInt(reqDetail[3])){
+                                
+                                if(reqDetail[4].isArmed){
+                                    if(detail.weaponCarrying){
+                                        arr.push(detail)
+                                    }
+                                }else{
+                                    if(!detail.weaponCarrying){
+                                        arr.push(detail)
+                                    }
+                                }
+                            }
+                        }
+                    // }
+                   
+                    return detail;
                 })
-                this.setState({bodyguardList: res.data.data})
+                console.log("bodyguards",res.data.data[0])
+                this.setState({bodyguardList: arr})
             }).finally(() => this.setState({isLoading: false}))
             .catch(err => console.log(err))
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);

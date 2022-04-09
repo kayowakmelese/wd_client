@@ -4,7 +4,7 @@ import constants, { Constants } from "../utils/constants";
 
 axiosRetry(axios, {retries: 3});
 
-const baseUrl = "https://rc5bh19lwl.execute-api.us-east-2.amazonaws.com/beta"
+const baseUrl =constants.AWSBucketUrl
 // const baseUrl = "http://192.168.170.188:5000/beta"
 // const baseUrl = "http://192.168.2.141:5000/beta"
 // const baseUrl = "http://192.168.3.200:5000/beta"
