@@ -4,7 +4,7 @@ import constants, { Constants } from "../utils/constants";
 
 axiosRetry(axios, {retries: 3});
 
-const baseUrl =constants.AWSBucketUrl
+const baseUrl = constants.AWSBucketUrl
 // const baseUrl = "http://192.168.170.188:5000/beta"
 // const baseUrl = "http://192.168.2.141:5000/beta"
 // const baseUrl = "http://192.168.3.200:5000/beta"
@@ -19,9 +19,9 @@ const Transport = {
     Auth: {
         sendOTP: (data: any) => axios.post(`${baseUrl}/auth/sendOTP`, data),
         resetPassword: (data: any) => axios.patch(`${baseUrl}/auth/resetPassword`, data),
-        verifyOTP: (data: any) => axios.post(`${baseUrl}/auth/verify`, data),
+        verifyOTP: (data: any) => axios.post(`${baseUrl}/auth/verify`, data).catch((error)=>console.log("error",error)),
         signup: (data: any) => axios.post(`${baseUrl}/auth/signup`, data),
-        login: (data: any) => axios.post(`${baseUrl}/auth/login`, data),
+        login: (data: any) => {console.log("data",data);axios.post(`${baseUrl}/auth/login`, data).catch((error)=>console.log("error",error))},
         facebookLogin:(data:any)=>axios.post(`${baseUrl}/auth/SSOLogin`,data)
 
     },

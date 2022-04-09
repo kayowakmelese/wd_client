@@ -41,7 +41,7 @@ export default class Match extends React.Component<Props, State> {
         Transport.User.allEPOs(JSON.parse(token))
             .then(res => {
                 let data = res.data.data
-                let arr=[];
+                let arr:any=[];
                 data.map(function (detail: any) {
                     // if (parseInt(detail.hourlyRate) < parseInt(reqDetail.reqDetail[3]))
                     let min=parseInt(reqDetail[4].selectedOption[12])
