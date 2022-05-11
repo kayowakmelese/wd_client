@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    Alert,
     BackHandler,
     DeviceEventEmitter,
     Image,
@@ -12,6 +13,8 @@ import {
     Text,
     View
 } from 'react-native'
+import StarRating from 'react-native-star-rating-widget';
+
 import Colors from "../../../utils/colors";
 import {AntDesign, FontAwesome} from "@expo/vector-icons";
 import {Constants} from "../../../utils/constants";
@@ -40,6 +43,7 @@ interface State {
     showCounter: boolean;
     moneyOffer: number;
     locationName:any;
+    
 }
 
 export default class ServiceDetail extends React.Component<Props, State> {
@@ -54,7 +58,8 @@ export default class ServiceDetail extends React.Component<Props, State> {
             viewOnMap: false,
             showCounter: false,
             moneyOffer: 0.00,
-            locationName:""
+            locationName:"",
+           
         }
     }
 
@@ -109,15 +114,13 @@ export default class ServiceDetail extends React.Component<Props, State> {
     render() {
         const {offerDetail, isSend, isAccept} = this.props.route.params,
             Services = Strings.services
-            console.log("offerdetail",offerDetail)
-            
             this.changesToString(offerDetail.reqDetail[1].latitude,offerDetail.reqDetail[1].longitude)
         return (
             <ScrollView contentContainerStyle={{
                 flex: 1,
                 justifyContent: 'space-between'
             }} style={{backgroundColor: Colors.primaryColor}}>
-
+                
                 <CustomModal navigation={this.props.navigation}
                              modalVisible={this.state.viewOnMap}
                              onRequestClose={() => this.setState({viewOnMap: false})}
@@ -270,9 +273,12 @@ export default class ServiceDetail extends React.Component<Props, State> {
                                 {
                                     label: 'Is Watch Dogg EPO armed?',
                                     value: offerDetail?.reqDetail[4]?.isArmed || false
+                                },
+                                {
+                                    label:'Is watch Dogg EPO Mobile?',
+                                    value:"false"
                                 }
                             ].map((service: any, idx: number) => {
-                                console.log("service",service)
                                 return (
                                     <View key={idx} style={{
                                         flexDirection: 'row',
@@ -377,16 +383,22 @@ export default class ServiceDetail extends React.Component<Props, State> {
                                                   paddingBottom: 5,
                                                   fontWeight: Constants.fontWeight
                                               }}>{offerDetail.rate}</Text> / Hour</Text>
-                                    <View style={{flexDirection: 'row'}}>
-                                        <AntDesign name="star" size={15} color={Colors.secondaryColor}/>
-                                        <Text allowFontScaling={false} // @ts-ignore
-                                              style={{
-                                                  color: Colors.secondaryColor,
-                                                  fontWeight: Constants.fontWeight
-                                              }}>{' 98%'}</Text>
-                                        <Text allowFontScaling={false} style={{color: Colors.gray}}>{' (117)'}</Text>
-                                    </View>
+                                    {
+                                     
+                                         <View style={{flexDirection:'row'}}>
+                                             <AntDesign name="star" size={15} color={Colors.secondaryColor}/>
+                                         <Text allowFontScaling={false} // @ts-ignore
+                                               style={{
+                                                   color: Colors.secondaryColor,
+                                                   fontWeight: Constants.fontWeight
+                                               }}>{' 98%'}</Text>
+                                         <Text allowFontScaling={false} style={{color: Colors.gray}}>{' (117)'}</Text>
+                                     </View>
+                                        }
                                 </View>
+                                       
+                                        
+                                
                                 <Button
                                     onPress={() => this.props.navigation.navigate('PaymentMethods', {
                                         isPaymentProcess: true,
@@ -397,7 +409,7 @@ export default class ServiceDetail extends React.Component<Props, State> {
                                     style={{width: '50%'}}
                                     noBorder={false}
                                     disabled={false}/>
-                            </View>
+                        </View>
                         }
 
                         {
@@ -495,6 +507,8 @@ export default class ServiceDetail extends React.Component<Props, State> {
             }).finally(() => this.setState({isLoading: false}))
             .catch(err => console.log(err.message))
     }
+    
+   
 }
 
 const styles = (props: any) => {

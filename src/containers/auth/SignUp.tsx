@@ -87,7 +87,7 @@ export default class SignUp extends React.Component<Props, State> {
                                     this.setState({error: true, errors: ['Email']})
                                 } else if (signupInfo.PhoneNumber.length < 14) {
                                     this.setState({error: true, errors: ['PhoneNumber']})
-                                }else if(signupInfo.Password.trim().length<=8){
+                                }else if(signupInfo.Password.trim().length<8){
                                     this.setState({error:true,idx:2})
                                     delete signupInfo.Password
                                 }else if (signupInfo.Password !== signupInfo.ConfirmPassword) {

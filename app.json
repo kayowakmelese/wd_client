@@ -23,6 +23,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "WatchDogg.bodyguard.client",
       "config": {
+               "googleMapsApiKey":"AIzaSyC9JpckEcmpbeAgw679Ha6EDrG8LaHcS_M",
+
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.725232741041-a3nn29aqn7vkfph6qo8474gdj5n63dk6"
         }

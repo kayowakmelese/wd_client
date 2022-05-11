@@ -245,7 +245,7 @@ const Strings = {
 
     home: {
         Home: {
-            message: 'Provide the details to book a Watch Dogg service.',
+            message: 'Provide the details to book a Watch Dogg EPO.',
             title: 'Please provide the following information:',
             required: [
                 {
@@ -264,9 +264,9 @@ const Strings = {
                         button: 'Close',
                         types: [
                             // 'Executive Protection',
-                            'Residential Property Protection',
-                            'Celebrity VIP Protection',
-                            'International Travel Protection',
+                            'Property Protection',
+                            'Celebrity/VIP Protection',
+                            'International Protection',
                         ]
                     }
                 },
@@ -427,7 +427,7 @@ const Strings = {
             button: 'Close'
         },
         headers: ["Notifications"],
-        buttons: ['Contact Watch Dogg', 'View Job Details', 'View Offer Details'],
+        buttons: ['Contact EPO', 'View Job Details', 'View Offer Details'],
         notificationType: [
             {
                 title: 'New notifications',
@@ -469,7 +469,7 @@ const Strings = {
 
     history: {
         headers: ['History', 'Summary'],
-        title: 'Watch Doggs you have hired:',
+        title: `Watch Dogg EPO's you have hired:`,
         lists: [
             {
                 image: require("../assets/img.png"),
@@ -494,7 +494,7 @@ const Strings = {
     services: {
         successMessage: {
             messages: 'Your offer has been sent.\n' +
-                'Please wait for the Watch Dogg’s reply.',
+                `Please wait for the EPO's reply.`,
             button: 'Continue'
         },
         errorMessage: {
@@ -520,7 +520,7 @@ const Strings = {
         },
         successMessage: {
             messages: 'Your payment was successful.\n' +
-                'Please contact your Watch Dogg.',
+                'Please contact your EPO.',
             button: 'Continue'
         },
         headers: ['Payment methods'],

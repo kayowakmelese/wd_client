@@ -46,6 +46,7 @@ interface State {
     selectedTime:any;
     selectedPlace:any;
     selectedText:any;
+    progress:number;
 }
 
 export default class Home extends React.Component<Props, State> {
@@ -53,7 +54,7 @@ export default class Home extends React.Component<Props, State> {
     constructor(Props: any) {
         super(Props);
         this.state = {
-            idx: 0,
+            idx: 2,
             plan: 0,
             rate: 0,
             selectedTime:new Date(),
@@ -69,7 +70,8 @@ export default class Home extends React.Component<Props, State> {
                 'Select one type'
             ],
             selectedPlace:"",
-            selectedText:Strings.home.Home.required[3].subTitle[0]
+            selectedText:Strings.home.Home.required[3].subTitle[0],
+            progress:0
 
         }
     }
@@ -86,14 +88,15 @@ export default class Home extends React.Component<Props, State> {
         this.setState({doneIndex})
     }
 
-    updateData = (value: any) => {
+    updateData = (id:any,value: any) => {
         let data = this.state.data
-        data[this.state.idx] = value
+        data[id] = value
+        console.log("insane",data)
         this.setState({data})
     }
     resetValue = (idx: number = this.state.idx) => {
         this.setState({
-            idx: 0,
+            idx: 2,
             plan: idx,
             rate: 0,
             type: false,
@@ -107,7 +110,8 @@ export default class Home extends React.Component<Props, State> {
                 'Select location',
                 'Select one type'
             ],
-            selectedText:Strings.home.Home.required[3].subTitle[idx]
+            selectedText:Strings.home.Home.required[3].subTitle[idx],
+            progress:0
 
             
         })
@@ -140,7 +144,7 @@ export default class Home extends React.Component<Props, State> {
         DeviceEventEmitter.addListener('changeLocation', (e) => {
             this.updateIndex()
             data[1] = JSON.stringify(e.value)
-            data[2] = 'Select one type'
+            // data[2] = 'Select one type'
             this.setState({data})
         })
 
@@ -191,10 +195,10 @@ export default class Home extends React.Component<Props, State> {
                                 let selectedTime = new Date()
                                 selectedTime.setTime(e.nativeEvent?.timestamp)
                                 console.log("selected time",selectedTime)
-                                if (new Date(moment().add(1,'hour').toISOString()).getTime() < new Date(selectedTime).getTime()) {
+                                if (new Date(moment().add(59,'minutes').toISOString()).getTime() < new Date(selectedTime).getTime()) {
                                     console.log("data length",data[0].length)
                                     data[0] = [new Date(selectedTime).toISOString()] || []
-                                    data[2] = 'Select one type'
+                                    // data[2] = 'Select one type'
                                     console.log("data2",data)
                                      this.setState({data})
                                     this.updateIndex()
@@ -223,9 +227,9 @@ export default class Home extends React.Component<Props, State> {
                             if (e.type === "set") {
                                 let selectedTime = new Date()
                                 selectedTime.setTime(e.nativeEvent?.timestamp)
-                                if (new Date(moment().add(1,'hour').toISOString()).getTime() < new Date(selectedTime).getTime()) {
+                                if (new Date(moment().add(30,'minute').toISOString()).getTime() < new Date(selectedTime).getTime()) {
                                     data[0] = [new Date(selectedTime).toLocaleString()] || []
-                                    data[2] = 'Select one type'
+                                    // data[2] = 'Select one type'
                                     this.setState({data, showTimePicker: false})
                                     this.updateIndex()
                                 } else {
@@ -262,7 +266,7 @@ export default class Home extends React.Component<Props, State> {
                                                 detail.types.map((element: string, idx: number) => {
                                                     return (
                                                         <Button key={idx} onPress={() => {
-                                                            this.updateData(element)
+                                                            this.updateData(1,element)
                                                             this.setState({type: false})
                                                             this.updateIndex()
                                                         }}
@@ -315,10 +319,10 @@ export default class Home extends React.Component<Props, State> {
                         }
                     </View>
                     <View>
-                        {
+                        {this.state.progress!==0?
                             Pending.required.map((data: any, idx: number) => {
                                 console.log("dataa",idx+JSON.stringify(data))
-                                if (idx < 3 || idx > 3)
+                                if (idx < 2 || idx > 3 ){
                                     return (
                                         <TouchableOpacity
                                             key={idx}
@@ -380,6 +384,7 @@ export default class Home extends React.Component<Props, State> {
                                             </View>
                                         </TouchableOpacity>
                                     )
+                                }else if(idx>=3){
                                 return (
                                     <View key={idx}>
                                         <View style={[styles(this.props).menus]}>
@@ -444,26 +449,91 @@ export default class Home extends React.Component<Props, State> {
                                         </View>
                                     </View>
                                 )
-                            })
-                        }
+                                                    }
+                            }):
+                            <>
+                            
+                                    <View style={{width: '100%', flexDirection: 'column'}}>
+                                        <Text allowFontScaling={false}
+                                            // @ts-ignore
+                                              style={{color:Colors.white,
+                                                  fontSize: 14, marginVertical: 20, textAlign: 'center',
+                                                  fontWeight: Constants.fontWeight
+                                              }}>{// @ts-ignore
+                                            detail.header}</Text>
+                                        {
+                                            // @ts-ignore
+                                            detail.types.map((element: string, idx: number) => {
+                                                return (
+                                                    <TouchableOpacity key={idx} onPress={() => {
+                                                        this.updateData(2,element)
+                                                        this.setState({type: false,progress:1,idx:0})
+                                                        this.updateIndex(this.state.doneIndex,2)
+                                                    }}
+                                                            style={[styles(this.props).menus]}
+                                                           
+                                                            disabled={false}>
+                                                                <View style={{alignItems: 'center'}}>
+                                                {/*<Text allowFontScaling={false} style={{color: Colors.white, paddingBottom: 5}}>{'Step'}</Text>*/}
+                                                <View style={styles(this.state.doneIndex.indexOf(idx)).order}>
+                                                    <Text allowFontScaling={false}
+                                                          style={{color: Colors.white, fontSize: 12}}>{idx + 1}</Text>
+                                                </View>
+                                            </View>
+                                            <View style={{
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-between',
+                                                width: '75%'
+                                            }}>
+                                                <View>
+                                                    <Text allowFontScaling={false}
+                                                          style={{color: Colors.white}}>{element}</Text>
+                                                    {/* {this.renderSubTitle(idx, this.state.plan, this.state.data)} */}
+                                                </View>
+                                                <View style={{position:'absolute',right:0,alignSelf:'center'}}>
+                                                <AntDesign name='right' size={22} color={Colors.gray}
+                                                           style={{alignSelf: 'center'}}/>
+                                                           </View>
+                                            </View>
+                                                            </TouchableOpacity>
+                                                )
+                                            })
+                                        }
+                                    </View>
+                                
+                          
+                            {/*<Button onPress={() => this.setState({type: false})}*/}
+                            {/*        label={detail.button.toString()}*/}
+                            {/*        isLoading={false}*/}
+                            {/*        style={{backgroundColor: Colors.white, color: Colors.primaryColor}}*/}
+                            {/*        noBorder={false} disabled={false}/>*/}
+                        </>}
+                        
                     </View>
-                    <Button
+                    {
+                        this.state.progress!==0?
+                        <Button
                         onPress={() => {
                             if (this.state.rate !== 0) {
                                 let detail = this.state.data
                                 detail[3] = this.state.rate
                                 detail[4] = this.state.description
+                                console.log("thisisdetail",detail)
                                 this.state.doneIndex.indexOf(4) > -1 &&
                                 this.props.navigation.navigate('Match', {detail})
                             } else {
                                 Alert.alert('Error', 'Offer per week can not be $ 0.00')
                             }
+                        
+                            
                         }}
                         label={'Continue'}
                         isLoading={false}
                         style={{width: '80%', marginVertical: 30}}
                         noBorder={false}
-                        disabled={this.state.doneIndex.indexOf(4) === -1}/>
+                        disabled={this.state.doneIndex.indexOf(4) === -1}/>:null
+                    }
+                    
                 </SafeAreaView>
             </ScrollView>
         );

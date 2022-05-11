@@ -53,12 +53,21 @@ export default class HistoryItem extends React.Component<Props, State> {
                 <View
                     style={{flexDirection: 'row', alignItems: 'center'}}>
                         <View style={{flexDirection:'row'}}>
-                        <Text allowFontScaling={false}
+                            <View>
+                            <Text allowFontScaling={false}
                           style={{
                               color: history?.status.toLowerCase() == "pending" ? Colors.pending :
                                   history?.status.toLowerCase() == "accepted" ?
-                                      Colors.active : Colors.secondaryColor, fontSize: 13
-                          }}>{'Detail'}</Text>
+                                      Colors.active : Colors.secondaryColor, fontSize: 13,textAlign:'right'
+                          }}>{ "Offer"}</Text>
+                          <Text allowFontScaling={false}
+                          style={{
+                              color: history?.status.toLowerCase() == "pending" ? Colors.pending :
+                                  history?.status.toLowerCase() == "accepted" ?
+                                      Colors.active : Colors.secondaryColor, fontSize: 10,opacity:0.8
+                          }}>{history?.status.toLowerCase() == "canceled"?"Declined":history.status}</Text>
+                            </View>
+                        
                          
                         </View>
                     

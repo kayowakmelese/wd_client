@@ -15,7 +15,7 @@ import {
     TouchableOpacity
 } from 'react-native'
 import * as Location from 'expo-location';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, {Marker,PROVIDER_GOOGLE} from 'react-native-maps';
 import {FontAwesome} from "@expo/vector-icons";
 
 import Colors from "../../../utils/colors";
@@ -110,7 +110,7 @@ export default class PickupAddress extends React.Component<Props, State> {
 
                     {
                          Object.keys(this.state.location).length > 0 ?
-                            <MapView
+                            <MapView provider={PROVIDER_GOOGLE}
                                 mapType={Platform.OS == "android" ? "mutedStandard" : "standard"}
                                 zoomEnabled
                                 zoomTapEnabled
@@ -121,7 +121,7 @@ export default class PickupAddress extends React.Component<Props, State> {
                                     location = event.nativeEvent.coordinate
                                     this.setState({location})
                                 }}
-                                minZoomLevel={12}
+                                minZoomLevel={15}
                                 showsUserLocation 
                                 showsCompass={true}
                                 showsMyLocationButton

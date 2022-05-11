@@ -372,7 +372,7 @@ export default class Login extends React.Component<Props, State> {
             } else {
                 this.setState({error: true, errors: ["Email", "Password"]})
             }
-        }).catch(() => this.setState({error: true, errors: ["Email", "Password"]}))
+        }).catch((er) => {console.log("errorr",er);this.setState({error: true, errors: ["Email", "Password"]})})
     }
     async facebookLogin(email:string) {
         let data = {

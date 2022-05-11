@@ -19,9 +19,9 @@ const Transport = {
     Auth: {
         sendOTP: (data: any) => axios.post(`${baseUrl}/auth/sendOTP`, data),
         resetPassword: (data: any) => axios.patch(`${baseUrl}/auth/resetPassword`, data),
-        verifyOTP: (data: any) => axios.post(`${baseUrl}/auth/verify`, data).catch((error)=>console.log("error",error)),
+        verifyOTP: (data: any) => axios.post(`${baseUrl}/auth/verify`, data),
         signup: (data: any) => axios.post(`${baseUrl}/auth/signup`, data),
-        login: (data: any) => {console.log("data",data);axios.post(`${baseUrl}/auth/login`, data).catch((error)=>console.log("error",error))},
+        login: (data: any) => axios.post(`${baseUrl}/auth/login`, data),
         facebookLogin:(data:any)=>axios.post(`${baseUrl}/auth/SSOLogin`,data)
 
     },
@@ -64,7 +64,7 @@ const Transport = {
                 "Authorization": 'Bearer ' + token
             }
         }),
-        allEPOs: (token: string) => axios.get(`${baseUrl}/user/allEPOs`, {
+        allEPOs: (token: string) => axios.get(`${baseUrl}/users/allEPOs`, {
             headers: {
                 ...headers,
                 "Authorization": 'Bearer ' + token
@@ -105,6 +105,18 @@ const Transport = {
                 "Authorization": 'Bearer ' + token
             }
         }),
+        rateEpo: (token: string,email:any, data: any) => axios.patch(`${baseUrl}/rate/${email}`, data, {
+            headers: {
+                ...headers,
+                "Authorization": 'Bearer ' + token
+            }
+        }),
+        getRating: (token: string, email:any, data: any) => axios.get(`${baseUrl}/rate/${email}`,{
+            headers: {
+                ...headers,
+                "Authorization": 'Bearer ' + token
+            }
+        } ),
         getUserRequests: (token: string) => axios.get(`${baseUrl}/request/requests`, {
             headers: {
                 ...headers,

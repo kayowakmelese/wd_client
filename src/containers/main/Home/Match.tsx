@@ -38,44 +38,51 @@ export default class Match extends React.Component<Props, State> {
     async UNSAFE_componentWillMount() {
         const token = await getSecureStoreItem('token'),
             reqDetail = this.props.route.params?.detail || {}
+            // console.log("changed",this.props.route.params)
+            console.log("tokeno",token)
         Transport.User.allEPOs(JSON.parse(token))
-            .then(res => {
+            .then(async res => {
                 let data = res.data.data
                 let arr:any=[];
-                data.map(function (detail: any) {
+                data.map(async function (detail: any) {
+                    console.log("detailst",JSON.stringify(detail.email))
+
                     // if (parseInt(detail.hourlyRate) < parseInt(reqDetail.reqDetail[3]))
-                    let min=parseInt(reqDetail[4].selectedOption[12])
-                    let max=parseInt(reqDetail[4].selectedOption[16])
+                    // let min=parseInt(reqDetail[4].selectedOption[12])
+                    // let max=parseInt(reqDetail[4].selectedOption[16])
                    
-                    console.log("changed",)
                     detail.reqDetail = reqDetail
-                    detail.price = 345.00
-                    detail.rate = '98%'
+                    detail.price = detail.hourlyRate
+                    // let rates=await Transport.Request.getRating(token,detail.email,{}).catch((e)=>console.log("eras",e))
+                    // console.log("rates",rates)
+                     detail.rate = '98%'
                     detail.rateCount = 45
                     detail.aboutData = [detail.height, detail.weight, detail.age]
-                    // if(detail.availability===0){
-                        if(detail.workingExperience<=min){
-                            if(parseInt(detail.hourlyRate)<parseInt(reqDetail[3])){
-                                
-                                if(reqDetail[4].isArmed){
-                                    if(detail.weaponCarrying){
-                                        arr.push(detail)
-                                    }
-                                }else{
-                                    if(!detail.weaponCarrying){
+                    //  if(detail.status===0){
+                        if(detail.isVerified){
+                            console.log("details",reqDetail)
+                            if(parseInt(detail.hourlyRate)<=parseInt(reqDetail[3])){
+                                console.log("details","i was here")
+
+                                if((detail.weaponCarrying!==null)===reqDetail[4].isArmed ){
+                                    if(reqDetail[4].isMobile===detail.isMobile){
                                         arr.push(detail)
                                     }
                                 }
+                               
                             }
+                            return detail;
                         }
-                    // }
+                        
+                        
+                    //  }
                    
-                    return detail;
+                   
                 })
-                console.log("bodyguards",res.data.data[0])
+                console.log("bodyguards",arr)
                 this.setState({bodyguardList: arr})
             }).finally(() => this.setState({isLoading: false}))
-            .catch(err => console.log(err))
+            .catch(err => console.log("matcherror",err))
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -92,7 +99,7 @@ export default class Match extends React.Component<Props, State> {
                     <Text allowFontScaling={false}
                         // @ts-ignore
                           style={{color: Colors.white, fontSize: 24, fontWeight: Constants.fontWeight}}>
-                        {'Watch Dogg Available'}</Text>
+                        {`EPO availability`}</Text>
                 </View>
                 {/*//TODO: User filter*/}
                 {/*<View style={{*/}
@@ -160,7 +167,9 @@ export default class Match extends React.Component<Props, State> {
             </View>
         );
     }
+    
 }
+
 
 const styles = (props: any) => {
     return StyleSheet.create({});

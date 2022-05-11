@@ -29,6 +29,7 @@ interface State {
     isLoading: boolean;
     isLogin: boolean;
     isArmed: boolean;
+    isMobile:boolean;
     description: string;
     selectedOption: any;
 }
@@ -42,8 +43,9 @@ export default class Policy extends React.Component<Props, State> {
             isLoading: false,
             isLogin: false,
             isArmed: false,
+            isMobile:false,
             description: "",
-            selectedOption: -1
+            selectedOption: 1
         }
     }
 
@@ -70,6 +72,7 @@ export default class Policy extends React.Component<Props, State> {
 
     render() {
         const {policy, button, signupInfo, buttonName} = this.props.route.params
+        console.log("iambuttonname",buttonName)
 
         return (
             <SafeAreaView
@@ -99,12 +102,13 @@ export default class Policy extends React.Component<Props, State> {
                                 }}>{policy.subTitle}</Text>
                             :
                             policy.experiences &&
+                            <View>
                             <View
                                 style={{
                                     flexDirection: 'row',
                                     justifyContent: 'space-between',
                                     alignItems: 'center',
-                                    marginVertical: 20,
+                                    marginVertical: 10,
                                     height: 54,
                                     paddingHorizontal: 30,
                                     backgroundColor: '#191919',
@@ -126,14 +130,48 @@ export default class Policy extends React.Component<Props, State> {
                                         // marginRight: 25
                                     }}
                                     trackColor={{false: '#767577', true: Colors.secondaryColor}}
-                                    thumbColor={this.state.isArmed ? Colors.white : Colors.gray}
+                                    thumbColor={this.state.isArmed ? Colors.white : '#FFFFFF50'}
                                     ios_backgroundColor={Colors.secondaryColor}
                                     onValueChange={() => this.setState({isArmed: !this.state.isArmed})}
                                     value={this.state.isArmed}
                                 />
                             </View>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    marginVertical: 10,
+                                    height: 54,
+                                    paddingHorizontal: 30,
+                                    backgroundColor: '#191919',
+                                }}>
+                                <View
+                                    style={{flexDirection: 'row', alignItems: 'center'}}>
+                                    <MaterialIcons name="lock" size={26} color={Colors.secondaryColor}/>
+                                    <Text allowFontScaling={false} // @ts-ignore
+                                          style={{
+                                              marginLeft: 10,
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontWeight: Constants.fontWeight
+                                          }}>{'Watch Dogg EPO Mobile?'}</Text>
+                                </View>
+                                <Switch
+                                    style={{
+                                        transform: [{scaleX: 1.2}, {scaleY: 1.2}],
+                                        // marginRight: 25
+                                    }}
+                                    trackColor={{false: '#767577', true: Colors.secondaryColor}}
+                                    thumbColor={this.state.isMobile ? Colors.white :'#FFFFFF50'}
+                                    ios_backgroundColor={Colors.secondaryColor}
+                                    onValueChange={() => this.setState({isMobile: !this.state.isMobile})}
+                                    value={this.state.isMobile}
+                                />
+                            </View>
+                            </View>
                     }
-                    <View style={{width: '90%', marginHorizontal: '5%'}}>
+                    {/* <View style={{width: '90%', marginHorizontal: '5%'}}>
                         {
                             policy.experiences &&
                             policy.experiences.map((option: string, idx: number) => {
@@ -172,8 +210,9 @@ export default class Policy extends React.Component<Props, State> {
                                 )
                             })
                         }
-                    </View>
+                    </View> */}
                     <Form data={policy.form} onChangeText={(label: string, value: string) => {
+                        console.log("vals",value)
                         if (value.split(' ').length < 76) {
                             this.setState({errors: [], description: value})
                         } else {
@@ -216,7 +255,7 @@ export default class Policy extends React.Component<Props, State> {
                                     marginBottom: 200
                                 }}
                                 noBorder={false}
-                                disabled={policy.experiences && (this.state.selectedOption === -1 || this.state.description === "")}
+                                disabled={!buttonName?false:this.state.description.trim().toString() === ""}
                         />
                     }
                 </ScrollView>

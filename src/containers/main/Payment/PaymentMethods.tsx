@@ -8,6 +8,7 @@ import {
     ScrollView,
     StyleSheet,
     Text,
+    Image,
     TouchableOpacity,
     View
 } from 'react-native'
@@ -20,6 +21,9 @@ import Button from "../../../components/Button";
 import SuccessfulCard from "../../../components/SuccessfulCard";
 import {getSecureStoreItem} from "../../../utils/CommonFunction";
 import Transport from "../../../api/Transport";
+import CustomModal from "../../../components/CustomModal";
+import Card from "../../../components/Card";
+import StarRating from "react-native-star-rating-widget";
 
 export interface Props {
     navigation: any;
@@ -32,6 +36,9 @@ interface State {
     isProcessing: boolean
     cards: any;
     success: boolean;
+    setRating:boolean;
+    ratingCompleted:number;
+    ratingLoading:boolean
 }
 
 
@@ -44,7 +51,10 @@ export default class PaymentMethods extends React.Component<Props, State> {
             isLoading: true,
             success: false,
             cardIndex: -1,
-            cards: []
+            cards: [],
+            setRating:false,
+            ratingCompleted:3,
+            ratingLoading:false
         }
     }
 
@@ -91,7 +101,49 @@ export default class PaymentMethods extends React.Component<Props, State> {
                 flex: 1,
                 justifyContent: 'space-between'
             }} style={{backgroundColor: Colors.primaryColor}}>
-
+ <CustomModal navigation={this.props.navigation}
+                             modalVisible={this.state.setRating}
+                             onRequestClose={() => this.setState({setRating: false})}
+                             renderView={() => {
+                                 return (
+                                     <View style={{borderRadius:Constants.radius,alignItems:'center',paddingVertical:20}}>
+                                     <Card cardViewContent={() => {
+                                         return (
+                                             <>
+                                             <View style={{width:'100%'}}>
+                                             <Image
+                            source={offerDetail.profilePicture === "" ? require('../../../assets/userIcon.png') : {uri: offerDetail.profilePicture}}
+                            style={{
+                                width: 55,
+                                height: 55,
+                                borderRadius: Constants.borderRadius * 100,
+                                marginRight: 25,alignSelf:'center'
+                            }}/>
+                                             <Text allowFontScaling={false} // @ts-ignore
+                                  style={{
+                                      color: Colors.primaryColor,
+                                      fontSize: 24,textAlign:'center',
+                                      fontWeight: Constants.fontWeight
+                                  }}>{offerDetail.fullName}</Text>
+                                                 <Text style={{textAlign:'center',color:'#222'}}>Rate Your EPO</Text>
+                                           <StarRating color={Colors.secondaryColor} style={{alignSelf:'center',paddingVertical:10}}
+                                           rating={this.state.ratingCompleted} 
+                                           onChange={(change:number)=>{
+                                               console.log("changed",change);
+                                               this.setState({ratingCompleted:change})}}
+                                                />
+                                                <Button label="Submit Rating" style={{}} noBorder={false} onPress={()=>{
+                                                    this.rateEpo(this.state.ratingCompleted,offerDetail.email)
+                                                }} disabled={this.state.ratingCompleted<=0?true:false} isLoading={this.state.ratingLoading}/>
+                                           </View>
+                                                    </>
+                                             
+                                         )
+                                     }} height={'70%'} width={'100%'} style={{borderWidth:0,elevation:0}}/>
+                                     {/* <Button label={"Close"} style={{}} isLoading={false} noBorder={false} onPress={()=>{this.setState({setRating:false})}} disabled={false}/> */}
+                                                </View>
+                                 )
+                             }} center={false} style={{borderRadius:0}}/>
                 <SuccessfulCard
                     successMessage={PaymentMethod.successMessage}
                     cardViewContent={undefined}
@@ -281,13 +333,31 @@ export default class PaymentMethods extends React.Component<Props, State> {
             .then(res => {
                 let data = res.data
                 if (data.code === 200) {
-                    this.setState({success: true})
+                    this.setState({setRating:true})
                 } else {
                     Alert.alert('Error', 'Payment not sent to the EPO.')
                 }
             })
-            .finally(() => this.setState({isProcessing: false}))
+            .finally(() =>{})
             .catch(err => console.log(err))
+    }
+    async rateEpo(rating: any,userEmail:any) {
+        let data = {
+            userRate: rating
+        }, token = await getSecureStoreItem('token')
+        this.setState({ratingLoading:true})
+        Transport.Request.rateEpo(JSON.parse(token),userEmail, data)
+            .then(res => {
+                console.log("ownabusiness",JSON.stringify(res.data))
+                if (res.data) {
+                    this.setState({setRating:false})
+                    setTimeout(()=>{
+                        // Alert.alert("Rating submitted","you have rated your EPO successfully!")
+                    },1000) 
+                  
+                }
+            }).finally(() => this.setState({ratingLoading: false,isProcessing:false,success: true}))
+            .catch(err => console.log(err.message))
     }
 }
 

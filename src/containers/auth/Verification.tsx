@@ -137,7 +137,7 @@ export default class Verification extends React.Component<Props, State> {
                                             this.setState({isLoading: true})
                                             let pass = this.state.codeValues
                                             let verifyData: any = {
-                                                "email": signupInfo.Email,
+                                                "email": signupInfo.Email.toLowerCase(),
                                                 "otp": parseInt(pass.join(''))
                                             }
                                             this.verifyCode(verifyData)
@@ -155,6 +155,7 @@ export default class Verification extends React.Component<Props, State> {
     }
 
     verifyCode(verifyData: any) {
+        console.log("verifyData",verifyData)
         Transport.Auth.verifyOTP(verifyData)
             .then((res: any) => {
                 if (res.data.success) {
@@ -163,7 +164,7 @@ export default class Verification extends React.Component<Props, State> {
                     this.setState({error: true, codeValues: []})
                 }
             })
-            .catch((error: any) => this.setState({error: true, codeValues: []}))
+            .catch((error: any) =>{console.log("veriera",error);this.setState({error: true, codeValues: []})})
             .finally(() => this.setState({isLoading: false}))
     }
 

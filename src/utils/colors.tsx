@@ -11,7 +11,7 @@ const Colors = {
     fbColor: "#095AB2",
     pending: "#ff8c00",
     active: "#08ff00",
-    canceled: "#ff0000"
+    canceled: "#ff0000",
 }
 
 export default Colors;
